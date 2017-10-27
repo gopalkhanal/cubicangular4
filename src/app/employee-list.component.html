@@ -1,0 +1,52 @@
+<!-- <h1>
+    {{title}}</h1>
+<table *ngIf= "appear">
+    <th>Name</th>
+    <th>Salary</th>
+    <tr>
+        <td>{{Name}}</td>
+        <td>{{Score}}</td>
+    </tr>
+</table> -->
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading">{{title}}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class = "col-md-2">Filter</div>
+            <div class = "col-md-4"><input [(ngModel)] = "listFilter"  type = "text"/></div>
+        </div>
+    </div>
+    <div class = "row">
+    <div class="table table-responsive">
+        <table *ngIf="empList.length" class="table table-bordered table-hover">
+            <tr>
+                <th><button class = "btn btn-primary" (click) = "ToggleImage()">{{showOrHide}} Image </button></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Grade</th>
+                <th>Status</th>
+                <th>Salary</th>
+            </tr>
+            <tr *ngFor="let emp of empList | EmployeeFilter: listFilter" >
+                <td><img *ngIf = "Show" align = "center" style = "width: 50px;height:50px"[src] = "emp.ImageUrl"/></td>
+                <td>{{emp.Name}}</td>
+                <td>{{emp.Email}}</td>
+                <td>{{emp.PhoneNumber}}</td>
+                <td> <app-rating [rating] = "emp.Grade"> </app-rating> </td>
+                <td>{{emp.Status}}</td>
+                <td>{{emp.Salary | currency: 'INR': true}}</td>
+                <!-- <app-grade></app-grade> -->
+                <!-- the above means nested compoent because whenever we have app-grade then we can place the component related to it  -->
+            </tr>
+
+        </table>
+    </div>
+</div>
+    <div class="panel-body">
+        <div class="panel-footer">
+            <div class = "row" > <button class = "btn btn-primary">Add Employee </button></div>
+        </div>
+    </div>
