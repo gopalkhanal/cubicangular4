@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import {IEmployee } from './IEmployee';
 import {OnInit, OnChanges, OnDestroy} from '@angular/core';
+import {EmployeeService} from './employee.service'
+import { ActivatedRoute } from "@angular/router";
+
 @Component(
     {
         selector: 'app-employees',
@@ -12,7 +15,9 @@ import {OnInit, OnChanges, OnDestroy} from '@angular/core';
 
 export class EmployeeListComponent  implements OnInit, OnChanges, OnDestroy{
     
+    constructor (private _empService: EmployeeService){
 
+    }
     title = 'Employees List';
     Name = 'teferey ';
     Score = 7000;
@@ -20,44 +25,53 @@ export class EmployeeListComponent  implements OnInit, OnChanges, OnDestroy{
     Show = false ; 
     showOrHide = 'Show';
     listFilter : string  ;
-    empList: IEmployee[] = [{
+    empList: IEmployee[]; 
+    isAdd = false;
+    imageurl = 'http://localhost:8082/';
+    order: string;
+  
+    currentEmployee: IEmployee = {
         Id: null,
-        Name: 'Tenzin ',
-        Email: 'tenIn@gmail.com',
-        PhoneNumber: 9723456767,
-        Status: 'green card ',
-        Grade: 30,
-        Salary: 9000,
-        ImageUrl: '../assets/Emp1.jpeg'
-    },
+        Name: "",
+        Email: "",
+        PhoneNumber: null,
+        Status: "",
+        Grade: null,
+        Salary: null,
+        imageUrl: ""
+    };
 
-    {
-        Id: null,
-        Name: 'Teferry ',
-        Email: 'tenIn@gmail.com',
-        PhoneNumber: 9723456767,
-        Status: 'green card ',
-        Grade: 70,
-        Salary: 6000,
-        ImageUrl: '../assets/Emp2.jpeg'
-    },
 
-    {
+    currentEmployee2: IEmployee = {
         Id: null,
-        Name: 'gopal ',
-        Email: 'tenIn@gmail.com',
-        PhoneNumber: 9723456767,
-        Status: 'green card ',
-        Grade: 70,
-        Salary: 8000,
-        ImageUrl: '../assets/Emp3.jpeg'
-    }];
+        Name: "",
+        Email: "",
+        PhoneNumber: null,
+        Status: "",
+        Grade: null,
+        Salary: null,
+        imageUrl: ""
+    };
+    
+    currentEmployee3: IEmployee = {
+        Id: null,
+        Name: "",
+        Email: "",
+        PhoneNumber: null,
+        Status: "",
+        Grade: null,
+        Salary: null,
+        imageUrl: ""
+    };
 
     ngOnInit(): void {
         // writing logic for getting data  from server 
+//      get data from service // need to call function getEmployees 
 
+    // this.empList = this._empService.GetEmployees();
 
-    }
+    this._empService.getEmployees().subscribe((data: IEmployee[]) => this.empList = data);
+    } 
 
     ngOnDestroy(): void {
         // logic for clean up code 
@@ -70,6 +84,32 @@ export class EmployeeListComponent  implements OnInit, OnChanges, OnDestroy{
         this.Show = !this.Show;
         this.showOrHide = (this.showOrHide === 'Show') ? 'Hide': 'Show';
 
+    }
+    GradeChanged(message): void {
+        this.title += message;
+
+    }
+
+    showForm(): void {
+        this.isAdd = !this.isAdd;
+    }
+
+    addEmployee(): void {
+        this._empService.addEmployees(this.currentEmployee)
+            .subscribe((data) => console.log(data));
+    }
+
+    sort(sortName: string) {
+        this.order = sortName;
+        console.log(sortName);
+    }
+
+    deleteEmp(employee2: IEmployee) {
+        this.currentEmployee2 = employee2;
+    }
+    deleteEmployee(): void {
+        this._empService.deleteEmployee(this.currentEmployee.Id)
+            .subscribe((data) => { console.log(data) });
     }
 
     

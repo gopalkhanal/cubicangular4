@@ -10,5 +10,5 @@ export interface IEmployee {
     Status : String;
     Grade: Number;
     Salary : number;
-    ImageUrl : String;
+    imageUrl : string;
 }

@@ -1,0 +1,52 @@
+<div class="panel panel-primary" *ngIf="employee">
+        <div class="panel-heading">
+            {{title}} : {{employee.Name}}
+        </div>
+    
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-3">Id:</div>
+                        <div class="col-md-6">{{employee.Id}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Name:</div>
+                        <div class="col-md-6">{{employee.Name}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Email:</div>
+                        <div class="col-md-6">{{employee.Email}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Phonenumber:</div>
+                        <div class="col-md-6">{{employee.Phonenumber}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Status:</div>
+                        <div class="col-md-6">{{employee.Status}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Grade:</div>
+                        <div class="col-md-6">
+    
+                            <app-rating [rating]='employee.Grade' (gradeClicked)='displayGrade($event)'></app-rating>                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Salary:</div>
+                        <div class="col-md-6">{{employee.Salary}}</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img [appImageEnhancer]="color" [src]="imageUrl1+employee.imageUrl" class="center-block img-responsive" [style.width.px]="200"
+                        [style.height.px]="200">
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <a class="btn btn-info btn-lg" [routerLink]="['/employees']"><i class="glyphicon glyphicon-arrow-left">Back</i></a>
+        </div>
+    </div>
+    <!-- <td><a [routerLink]="[employee.Id]">{{employee.Name}}</a></td> -->
+    <!-- <a class="navbar-brand" [routerLink]="['/welcome']">Cubic Technologies</a> -->

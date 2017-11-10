@@ -3,6 +3,6 @@
 it to the template  -->
 
 <div class = "progress" style = "width:86px;">
-    <div class = "progress-bar primary" [style.width.px] = "ratingWidth"></div>
+    <div class = "progress-bar primary" [style.width.px] = "ratingWidth" (click) = "GradeClicked()"></div>
     <span>{{rating}}</span>
 </div>

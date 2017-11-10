@@ -14,39 +14,133 @@
     <div class="panel-heading">{{title}}</div>
     <div class="panel-body">
         <div class="row">
-            <div class = "col-md-2">Filter</div>
-            <div class = "col-md-4"><input [(ngModel)] = "listFilter"  type = "text"/></div>
+            <div class="col-md-2">Filter</div>
+            <div class="col-md-4"><input [(ngModel)]="listFilter" type="text" /></div>
         </div>
     </div>
-    <div class = "row">
-    <div class="table table-responsive">
-        <table *ngIf="empList.length" class="table table-bordered table-hover">
-            <tr>
-                <th><button class = "btn btn-primary" (click) = "ToggleImage()">{{showOrHide}} Image </button></th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Grade</th>
-                <th>Status</th>
-                <th>Salary</th>
-            </tr>
-            <tr *ngFor="let emp of empList | EmployeeFilter: listFilter" >
-                <td><img *ngIf = "Show" align = "center" style = "width: 50px;height:50px"[src] = "emp.ImageUrl"/></td>
-                <td>{{emp.Name}}</td>
-                <td>{{emp.Email}}</td>
-                <td>{{emp.PhoneNumber}}</td>
-                <td> <app-rating [rating] = "emp.Grade"> </app-rating> </td>
-                <td>{{emp.Status}}</td>
-                <td>{{emp.Salary | currency: 'INR': true}}</td>
-                <!-- <app-grade></app-grade> -->
-                <!-- the above means nested compoent because whenever we have app-grade then we can place the component related to it  -->
-            </tr>
+    <div class="row">
+        <div class="table table-responsive">
+            <table *ngIf="empList" class="table table-bordered table-hover">
+                <tr>
+                    <th><button class="btn btn-primary" (click)="ToggleImage()">{{showOrHide}} Image </button></th>
+                    <th> <a style="cursor:pointer" (click)="sort('Name')"> Name </a> </th>
+                    <th> <a style="cursor:pointer" (click)="sort('Email')">Email</a> </th>
+                    <th> <a style="cursor:pointer" (click)="sort('PhoneNumber')"> PhoneNumber </a> </th>
+                    <th> <a style="cursor:pointer" (click)="sort('Grade')"> Grade </a> </th>
+                    <th> <a style="cursor:pointer" (click)="sort('Status')"> Status </a> </th>
+                    <th> <a style="cursor:pointer" (click)="sort('Salary')"> Salary </a> </th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <tr *ngFor="let emp of empList | EmployeeFilter: listFilter">
+                    <td><img *ngIf="Show" align="center" style="width: 50px;height:50px" [src]="imageurl+emp.imageUrl" /></td>
+                    <td> {{emp.Name}}</td>
+                    <td>{{emp.Email}}</td>
+                    <td>{{emp.PhoneNumber}}</td>
+                    <td>
+                        <app-rating [rating]="emp.Grade" (gradeClicked)="GradeChanged($event)"> </app-rating>
+                    </td>
+                    <td>{{emp.Status}}</td>
+                    <td>{{emp.Salary | currency: 'INR': true}}</td>
 
-        </table>
+
+                    <td><button class="btn btn-warning" (click)="updateEmp(employee)" data-toggle="modal" data-target="#myModal1">Edit</button></td>
+                    <td><button class="btn btn-danger" (click)="deleteEmp(employee)" data-toggle="modal" data-target="#myModal3">Delete</button></td>
+
+                    <!-- <app-grade></app-grade> -->
+                    <!-- the above means nested compoent because whenever we have app-grade then we can place the component related to it  -->
+                </tr>
+
+            </table>
+        </div>
+
+
+<!-- 
+        <div class="modal fade" id="myModal3" role="dialog">
+                <div class="modal-dialog modal-md">
+    
+                    Modal content -->
+                    <!-- <div class="modal-content">
+                        <div class="madal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title text-danger"><b>!!This will delete {{currentEmployee.Name}}'s record from your database!!" </b></h4>
+                        </div>
+                        <hr>
+                        <div class="modal-body">
+                            <p class="text-center text-danger"><b>Are you sure to remove {{currentEmployee.Name}}'s record?</b></p>
+                            <button class="btn btn-danger center-block" (click)="deleteEmployee()">Delete</button><br>
+                            <p class="text-center text-primary"><b>Click Cancle to go back..</b></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">Cancle</button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+
+
+
     </div>
-</div>
     <div class="panel-body">
-        <div class="panel-footer">
-            <div class = "row" > <button class = "btn btn-primary">Add Employee </button></div>
+        <div class="panel panel-footer">
+            <div class="row">
+                <button type="button" class="btn btn-primary" (click)="showForm()">Add Employee</button><br><br>
+                <div *ngIf="isAdd">
+                    <table>
+                        <!-- [(ngModel)]=""  -->
+                        <tr>
+                            <td><b>Name</b></td>
+                            <td><input type="text" [(ngModel)]="currentEmployee.Name" placeholder="Name" required class="form-control"
+                                /></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Email</b></td>
+                            <td><input type="text" placeholder="Email" [(ngModel)]="currentEmployee.Email" required class="form-control"
+                                /></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>PhoneNumber</b></td>
+                            <td><input type="text" placeholder="Phonenumber" [(ngModel)]="currentEmployee.PhoneNumber" required
+                                    class="form-control"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Status</b></td>
+                            <td><input type="text" placeholder="Status" [(ngModel)]="currentEmployee.Status" required class="form-control"></td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Grade</b></td>
+                            <td><input type="text" placeholder="Grade" [(ngModel)]="currentEmployee.Grade" required class="form-control"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Salary</b></td>
+                            <td><input type="text" placeholder="Salary" [(ngModel)]="currentEmployee.Salary" required class="form-control"></td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><button type="button" class="btn btn-success" (click)="addEmployee()" (click)="isAdd = !isAdd">Save</button></td>
+                            <td></td>
+                            <td></td>
+                            <td><button type="button" class="btn btn-danger" (click)="isAdd = !isAdd">Cancle</button></td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                </div>
+
+
+
+
+            </div>
         </div>
     </div>
